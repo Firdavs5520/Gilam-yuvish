@@ -2,19 +2,17 @@
 <html lang="uz">
   <head>
     <meta charset="UTF-8" />
-    <title>Gilam Yuvish — Admin</title>
+    <title>🧺 Gilam Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
       :root {
-        --bg: #0f172a;
-        --sidebar: #020617;
-        --card: #020617;
+        --bg: #020617;
         --panel: #020617;
+        --card: rgba(2, 6, 23, 0.75);
         --text: #e5e7eb;
         --muted: #94a3b8;
         --accent: #38bdf8;
-        --danger: #ef4444;
         --border: #1e293b;
       }
 
@@ -24,7 +22,7 @@
 
       body {
         margin: 0;
-        background: var(--bg);
+        background: radial-gradient(circle at top, #020617, #000);
         color: var(--text);
         font-family: system-ui, sans-serif;
       }
@@ -34,70 +32,62 @@
         min-height: 100vh;
       }
 
-      /* SIDEBAR */
+      /* ===== SIDEBAR ===== */
       .sidebar {
-        width: 260px;
-        background: var(--sidebar);
+        width: 240px;
+        background: var(--panel);
+        border-right: 1px solid var(--border);
         padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
       }
 
       .logo {
         font-size: 20px;
         font-weight: 800;
-        text-align: center;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border);
+        margin-bottom: 24px;
       }
 
       .menu button {
         width: 100%;
-        padding: 14px;
-        border-radius: 12px;
+        background: none;
         border: none;
-        background: transparent;
         color: var(--text);
-        text-align: left;
-        font-size: 15px;
+        padding: 12px;
+        border-radius: 10px;
         cursor: pointer;
+        text-align: left;
+        margin-bottom: 6px;
       }
 
       .menu button:hover {
-        background: #020617;
+        background: rgba(56, 189, 248, 0.15);
       }
 
-      /* MAIN */
+      /* ===== MAIN ===== */
       .main {
         flex: 1;
         padding: 24px;
       }
 
-      .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-      }
-
       .card {
+        max-width: 520px;
         background: var(--card);
+        border: 1px solid var(--border);
         border-radius: 18px;
-        padding: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        padding: 22px;
       }
 
-      h2 {
+      h1 {
         margin-top: 0;
+        text-align: center;
       }
 
       input,
       button {
         width: 100%;
         padding: 14px;
-        border-radius: 12px;
-        font-size: 15px;
         margin-top: 10px;
+        border-radius: 12px;
+        font-size: 16px;
       }
 
       input {
@@ -108,77 +98,96 @@
 
       button {
         border: none;
-        background: var(--accent);
-        color: #020617;
+        background: linear-gradient(135deg, var(--accent), #0ea5e9);
+        color: #000;
         font-weight: 700;
         cursor: pointer;
+        transition: 0.15s;
       }
 
       button:active {
         transform: scale(0.97);
       }
 
+      button[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       ul {
         list-style: none;
         padding: 0;
-        margin: 10px 0;
+        margin: 12px 0;
       }
 
       li {
         display: flex;
         justify-content: space-between;
-        padding: 8px 0;
         border-bottom: 1px dashed var(--border);
+        padding: 8px 0;
       }
 
       .total {
         text-align: center;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 800;
-        margin: 12px 0;
+        margin: 16px 0;
       }
 
-      /* HISTORY */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-      }
-
-      th,
-      td {
-        padding: 10px;
-        border-bottom: 1px solid var(--border);
-        text-align: left;
-      }
-
-      th {
+      /* ===== LOADING ===== */
+      .loading {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
         color: var(--muted);
       }
 
-      .actions button {
-        width: auto;
-        padding: 6px 10px;
-        font-size: 13px;
-        margin-right: 6px;
+      .spinner {
+        width: 22px;
+        height: 22px;
+        border: 3px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
       }
 
-      .delete {
-        background: var(--danger);
-        color: white;
-      }
-
-      .open {
-        background: #22c55e;
-        color: #020617;
-      }
-
-      @media (max-width: 900px) {
-        .grid {
-          grid-template-columns: 1fr;
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 900px) {
+        .app {
+          flex-direction: column;
+        }
+
         .sidebar {
-          display: none;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .menu {
+          display: flex;
+          gap: 8px;
+        }
+
+        .menu button {
+          padding: 10px 14px;
+          white-space: nowrap;
+        }
+
+        .main {
+          padding: 16px;
+        }
+
+        .card {
+          max-width: 100%;
         }
       }
     </style>
@@ -190,73 +199,88 @@
       <aside class="sidebar">
         <div class="logo">🧺 GILAM ADMIN</div>
         <div class="menu">
-          <button>➕ Yangi buyurtma</button>
-          <button>🧾 Cheklar tarixi</button>
+          <button onclick="showOrder()">➕ Yangi buyurtma</button>
+          <button onclick="showReport()">📊 Hisobotlar</button>
         </div>
       </aside>
 
       <!-- MAIN -->
       <main class="main">
-        <div class="grid">
-          <!-- CREATE ORDER -->
-          <div class="card">
-            <h2>➕ Yangi buyurtma</h2>
+        <!-- BUYURTMA -->
+        <section id="orderPage" class="card">
+          <h1>Yangi buyurtma</h1>
 
-            <input id="name" placeholder="Ism" />
-            <input id="phone" placeholder="Telefon" />
+          <input id="name" placeholder="Mijoz ismi" />
+          <input id="phone" placeholder="Telefon" />
+          <input id="price" type="number" value="10000" />
 
-            <input id="price" type="number" value="10000" />
+          <input id="l" type="number" placeholder="Uzunlik (m)" />
+          <input id="w" type="number" placeholder="Eni (m)" />
 
-            <input id="l" type="number" placeholder="Uzunlik" />
-            <input id="w" type="number" placeholder="Eni" />
-            <button onclick="addItem()">Gilam qo‘shish</button>
+          <button onclick="addItem()">➕ Gilam qo‘shish</button>
 
-            <ul id="list"></ul>
+          <ul id="list"></ul>
 
-            <div class="total">Jami: <span id="total">0</span> so‘m</div>
+          <div class="total">Jami: <span id="total">0</span> so‘m</div>
 
-            <input id="paid" type="number" placeholder="To‘langan summa" />
+          <input id="paid" type="number" placeholder="To‘langan summa" />
 
-            <button onclick="saveOrder()">🧾 Chek chiqarish</button>
+          <button id="saveBtn" onclick="saveOrder()">🧾 Chek chiqarish</button>
+
+          <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <span>Saqlanmoqda...</span>
           </div>
+        </section>
 
-          <!-- HISTORY -->
-          <div class="card">
-            <h2>🧾 Cheklar tarixi</h2>
-
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Ism</th>
-                  <th>Jami</th>
-                  <th>Amallar</th>
-                </tr>
-              </thead>
-              <tbody id="history"></tbody>
-            </table>
-          </div>
-        </div>
+        <!-- HISOBOT -->
+        <section id="reportPage" class="card" style="display: none">
+          <h1>📊 Hisobot</h1>
+          <p class="muted">
+            Hisobotlar sahifasi (hisobot.html shu yerga ko‘chiriladi)
+          </p>
+        </section>
       </main>
     </div>
 
     <script>
       const API = "https://gilam-yuvish-backend.onrender.com";
 
-      let items = [];
+      const nameInput = document.getElementById("name");
+      const phoneInput = document.getElementById("phone");
+      const priceInput = document.getElementById("price");
+      const lInput = document.getElementById("l");
+      const wInput = document.getElementById("w");
+      const paidInput = document.getElementById("paid");
       const list = document.getElementById("list");
       const totalEl = document.getElementById("total");
-      const historyEl = document.getElementById("history");
+      const loading = document.getElementById("loading");
+      const saveBtn = document.getElementById("saveBtn");
+
+      const orderPage = document.getElementById("orderPage");
+      const reportPage = document.getElementById("reportPage");
+
+      let items = [];
+
+      function showOrder() {
+        orderPage.style.display = "block";
+        reportPage.style.display = "none";
+      }
+
+      function showReport() {
+        window.location.href = "hisobot.html";
+      }
 
       function addItem() {
-        const l = +document.getElementById("l").value;
-        const w = +document.getElementById("w").value;
-        const p = +document.getElementById("price").value;
+        const l = Number(lInput.value);
+        const w = Number(wInput.value);
+        const p = Number(priceInput.value);
 
-        if (!l || !w) return alert("O‘lcham kiriting");
+        if (!l || !w) return alert("O‘lchamlarni kiriting");
 
         items.push({ l, w, sum: l * w * p });
-        l.value = w.value = "";
+        lInput.value = "";
+        wInput.value = "";
         render();
       }
 
@@ -265,79 +289,51 @@
         let sum = 0;
         items.forEach((i) => {
           sum += i.sum;
-          list.innerHTML += `
-      <li><span>${i.l}×${i.w}</span><span>${i.sum.toLocaleString()}</span></li>
-    `;
+          list.innerHTML += `<li><span>${i.l}×${
+            i.w
+          }</span><span>${i.sum.toLocaleString()}</span></li>`;
         });
         totalEl.textContent = sum.toLocaleString();
       }
 
       async function saveOrder() {
-        if (!name.value) return alert("Ism kiriting");
-        if (!items.length) return alert("Gilam yo‘q");
+        if (!nameInput.value) return alert("Ism kiriting");
+        if (!items.length) return alert("Gilam qo‘shing");
+
+        loading.style.display = "flex";
+        saveBtn.disabled = true;
+
+        const totalSum = items.reduce((s, i) => s + i.sum, 0);
 
         const order = {
-          name: name.value,
-          phone: phone.value,
+          name: nameInput.value,
+          phone: phoneInput.value,
           items,
-          total: items.reduce((s, i) => s + i.sum, 0),
-          paid: +paid.value || 0,
+          total: totalSum,
+          paid: Number(paidInput.value) || 0,
         };
 
-        const res = await fetch(API + "/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(order),
-        });
+        try {
+          await fetch(API + "/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order),
+          });
 
-        const saved = await res.json();
-        localStorage.setItem("currentOrder", JSON.stringify(saved));
+          localStorage.setItem("currentOrder", JSON.stringify(order));
 
-        items = [];
-        list.innerHTML = "";
-        totalEl.textContent = "0";
-        name.value = phone.value = paid.value = "";
+          items = [];
+          render();
+          nameInput.value = phoneInput.value = paidInput.value = "";
 
-        window.open("print.html", "_blank");
-        loadHistory();
+          window.open("print.html");
+        } catch {
+          alert("Server xatosi");
+        } finally {
+          loading.style.display = "none";
+          saveBtn.disabled = false;
+        }
       }
-
-      async function loadHistory() {
-        const res = await fetch(API + "/orders");
-        const orders = await res.json();
-
-        historyEl.innerHTML = "";
-        orders.reverse().forEach((o) => {
-          historyEl.innerHTML += `
-      <tr>
-        <td>${o.orderNo || "-"}</td>
-        <td>${o.name}</td>
-        <td>${Number(o.total).toLocaleString()}</td>
-        <td class="actions">
-          <button class="open" onclick='openCheck(${JSON.stringify(
-            o
-          )})'>Ochish</button>
-          <button class="delete" onclick="deleteOrder('${
-            o._id
-          }')">O‘chirish</button>
-        </td>
-      </tr>
-    `;
-        });
-      }
-
-      function openCheck(order) {
-        localStorage.setItem("currentOrder", JSON.stringify(order));
-        window.open("print.html", "_blank");
-      }
-
-      async function deleteOrder(id) {
-        if (!confirm("Rostdan o‘chirasizmi?")) return;
-        await fetch(API + "/orders/" + id, { method: "DELETE" });
-        loadHistory();
-      }
-
-      loadHistory();
     </script>
   </body>
 </html>
