@@ -3,17 +3,15 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Brand</title>
+  <title>Brand — Yangi chek</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- favicon -->
   <link rel="icon" type="image/png"
     href="https://peculiar-azure-xpdzzqfo3r.edgeone.app/Skrinshot_2026-01-03_175603-removebg-preview.png" />
 
   <style>
     :root {
       --bg: #020617;
-      --panel: #020617;
       --card: rgba(2, 6, 23, 0.85);
       --text: #e5e7eb;
       --muted: #94a3b8;
@@ -33,6 +31,7 @@
       background: radial-gradient(circle at top, #020617, #000);
       color: var(--text);
       font-family: system-ui, sans-serif;
+      min-height: 100vh;
     }
 
     .app {
@@ -42,7 +41,7 @@
 
     /* SIDEBAR */
     .sidebar {
-      width: 230px;
+      width: 220px;
       background: rgba(2, 6, 23, 0.9);
       border-right: 1px solid var(--border);
       padding: 20px;
@@ -51,7 +50,7 @@
     .logo {
       font-size: 20px;
       font-weight: 800;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .menu button {
@@ -63,7 +62,7 @@
       border-radius: 10px;
       cursor: pointer;
       text-align: left;
-      margin: 0;
+      margin-bottom: 6px;
     }
 
     .menu button:hover {
@@ -72,24 +71,26 @@
 
     /* MAIN */
     .main {
-      flex: 2;
-      padding: 13px;
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
     }
 
     .card {
+      width: 100%;
+      max-width: 520px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 20px;
-      width: 100%;
-      max-width: 100vw;
       display: flex;
       flex-direction: column;
     }
 
     h1 {
       text-align: center;
-      margin-top: 0;
+      margin: 0 0 10px;
     }
 
     input,
@@ -113,20 +114,8 @@
       color: #000;
       font-weight: 800;
       cursor: pointer;
-      transition: 0.15s;
     }
 
-    button:active {
-      transform: scale(0.97);
-    }
-
-    button.secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    /* LIST */
     ul {
       list-style: none;
       padding: 0;
@@ -137,9 +126,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
       border-bottom: 1px dashed var(--border);
       padding: 8px 0;
+      gap: 8px;
     }
 
     .item-actions {
@@ -151,7 +140,6 @@
       padding: 6px 10px;
       font-size: 13px;
       border-radius: 8px;
-      font-weight: 700;
     }
 
     .edit {
@@ -168,10 +156,9 @@
       text-align: center;
       font-size: 22px;
       font-weight: 800;
-      margin: 14px 0;
+      margin: 12px 0;
     }
 
-    /* PAYMENT */
     .pay-buttons {
       display: flex;
       gap: 8px;
@@ -182,198 +169,44 @@
       color: #000;
     }
 
-    /* LOADING */
     .loading {
       display: none;
       justify-content: center;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
+      gap: 8px;
       margin-top: 12px;
+      color: var(--muted);
     }
 
-    .spinner {
-      width: 22px;
-      height: 22px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* MOBILE */
     @media (max-width: 768px) {
       .sidebar {
         display: none;
-      }
-
-      .main {
-        padding: 10px;
-      }
-    }
-
-    /* 📱 MOBILE TOP BAR */
-    .mobile-bar {
-      display: none;
-      margin-bottom: 12px;
-    }
-
-    @media (max-width: 768px) {
-      .mobile-bar {
-        display: block;
-      }
-
-      .mobile-bar button {
-        width: 100%;
-        padding: 14px;
-        border-radius: 14px;
-        font-size: 16px;
-        font-weight: 800;
-        background: linear-gradient(135deg, var(--accent), #0ea5e9);
-        color: #000;
-      }
-    }
-
-    /* RIGHT HISTORY PANEL */
-    .history {
-      flex: 1;
-      min-width: 360px;
-      max-height: calc(100vh - 48px);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .history-header h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .refresh {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      border-radius: 10px;
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-
-    .history-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .history-list li {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 10px;
-      background: rgba(2, 6, 23, 0.6);
-    }
-
-    .history-list b {
-      display: block;
-      font-size: 15px;
-    }
-
-    .history-meta {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .history-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .history-actions button {
-      flex: 1;
-      padding: 8px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .open {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .delete {
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-    }
-
-    /* LOADING */
-    .history-loading {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--muted);
-      margin-top: 20px;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 1100px) {
-      .app {
-        flex-direction: column;
-      }
-
-      .history {
-        max-height: none;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- MOBILE TOP BAR -->
-
   <div class="app">
+
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="logo">Brand</div>
       <div class="menu">
         <button onclick="location.href='cheklar.html'">🧾 Cheklar</button>
-        <button onclick="openReport()">📊 Hisobotlar</button>
+        <button onclick="location.href='hisobot.html'">📊 Hisobotlar</button>
       </div>
     </aside>
 
     <!-- MAIN -->
     <main class="main">
-      <div class="mobile-bar">
-        <button onclick="openReport()">📊 Hisobotlar</button>
-        <button onclick="location.href='cheklar.html'">🧾 Cheklar</button>
-
-      </div>
       <div class="card">
         <h1>Yangi buyurtma</h1>
 
         <input id="customerName" placeholder="Familiya, Ism" />
-        <input id="phone" placeholder="+998 (__) ___-__-__" />
+        <input id="phone" type="text" placeholder="+998 (__) ___-__-__" />
         <input id="address" placeholder="Manzil" />
 
-        <input id="price" type="number" value="10000" />
+        <input id="price" type="number" value="15000" />
 
         <input id="l" type="number" placeholder="Uzunlik (m)" />
         <input id="w" type="number" placeholder="Eni (m)" />
@@ -387,18 +220,13 @@
         <input id="paid" type="number" placeholder="To‘langan summa" />
 
         <div class="pay-buttons">
-          <button onclick="setPay('Naqd')" id="payNaqd" class="active">
-            💵 Naqd
-          </button>
-          <button onclick="setPay('Karta')" id="payKarta">💳 Karta</button>
+          <button id="payNaqd" class="active" onclick="setPay('Naqd')">💵 Naqd</button>
+          <button id="payKarta" onclick="setPay('Karta')">💳 Karta</button>
         </div>
 
-        <button id="saveBtn" onclick="saveOrder()">🧾 Chek chiqarish</button>
+        <button onclick="saveOrder()">🧾 Chek chiqarish</button>
 
-        <div class="loading" id="loading">
-          <div class="spinner"></div>
-          <span>Saqlanmoqda...</span>
-        </div>
+        <div class="loading" id="loading">Saqlanmoqda...</div>
       </div>
     </main>
   </div>
@@ -416,17 +244,19 @@
     const list = document.getElementById("list");
     const totalEl = document.getElementById("total");
     const loading = document.getElementById("loading");
-    const saveBtn = document.getElementById("saveBtn");
 
     let items = [];
     let editIndex = null;
     let paymentType = "Naqd";
 
-    function openReport() {
-      location.href = "hisobot.html";
-    }
+    /* ISMNI KATTA HARF */
+    nameInput.addEventListener("input", () => {
+      nameInput.value = nameInput.value
+        .toLowerCase()
+        .replace(/\b\w/g, c => c.toUpperCase());
+    });
 
-    /* 📞 PHONE FORMAT */
+    /* TELEFON FORMAT */
     phoneInput.addEventListener("input", () => {
       let v = phoneInput.value.replace(/\D/g, "");
       if (v.startsWith("998")) v = v.slice(3);
@@ -442,16 +272,16 @@
       phoneInput.value = r;
     });
 
-    function setPay(type) {
-      paymentType = type;
-      payNaqd.classList.toggle("active", type === "Naqd");
-      payKarta.classList.toggle("active", type === "Karta");
+    function setPay(t) {
+      paymentType = t;
+      payNaqd.classList.toggle("active", t === "Naqd");
+      payKarta.classList.toggle("active", t === "Karta");
     }
 
     function addItem() {
-      const l = Number(lInput.value);
-      const w = Number(wInput.value);
-      const p = Number(priceInput.value);
+      const l = +lInput.value;
+      const w = +wInput.value;
+      const p = +priceInput.value;
 
       if (!l || !w) return alert("O‘lchamlarni kiriting");
 
@@ -473,18 +303,17 @@
       list.innerHTML = "";
       let sum = 0;
 
-      items.forEach((i, index) => {
+      items.forEach((i, idx) => {
         sum += i.sum;
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <span>${i.l} × ${i.w}</span>
-            <span>${i.sum.toLocaleString()}</span>
-            <div class="item-actions">
-              <button class="edit" onclick="editItem(${index})">✏️</button>
-              <button class="delete" onclick="removeItem(${index})">🗑</button>
-            </div>
-          `;
-        list.appendChild(li);
+        list.innerHTML += `
+      <li>
+        <span>${i.l} × ${i.w}</span>
+        <span>${i.sum.toLocaleString()}</span>
+        <div class="item-actions">
+          <button class="edit" onclick="editItem(${idx})">✏️</button>
+          <button class="delete" onclick="removeItem(${idx})">🗑</button>
+        </div>
+      </li>`;
       });
 
       totalEl.textContent = sum.toLocaleString();
@@ -497,107 +326,39 @@
     }
 
     function removeItem(i) {
-      if (!confirm("Gilamni o‘chirasizmi?")) return;
+      if (!confirm("Gilam o‘chirilsinmi?")) return;
       items.splice(i, 1);
       render();
     }
 
     async function saveOrder() {
-      if (!nameInput.value) return alert("Ism kiriting");
-      if (!items.length) return alert("Gilam qo‘shing");
+      if (!nameInput.value.trim()) return alert("Ism kiriting");
+      if (!phoneInput.value.includes("+998")) return alert("Telefonni to‘g‘ri kiriting");
+      if (!addressInput.value.trim()) return alert("Manzil kiriting");
+      if (!items.length) return alert("Kamida 1 ta gilam qo‘shing");
 
       loading.style.display = "flex";
-      saveBtn.disabled = true;
-
-      const totalSum = items.reduce((s, i) => s + i.sum, 0);
 
       const order = {
         name: nameInput.value,
         phone: phoneInput.value,
         address: addressInput.value,
         items,
-        total: totalSum,
-        paid: Number(paidInput.value) || 0,
+        total: items.reduce((a, b) => a + b.sum, 0),
+        paid: +paidInput.value || 0,
         paymentType,
+        createdAt: new Date().toISOString()
       };
 
-      try {
-        await fetch(API + "/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(order),
-        });
+      await fetch(API + "/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+      });
 
-        localStorage.setItem("currentOrder", JSON.stringify(order));
-
-        items = [];
-        render();
-        nameInput.value =
-          phoneInput.value =
-          addressInput.value =
-          paidInput.value =
-          "";
-
-        location.href = "print.html";
-      } catch {
-        alert("Server xatosi");
-      } finally {
-        loading.style.display = "none";
-        saveBtn.disabled = false;
-      }
+      localStorage.setItem("printOrder", JSON.stringify(order));
+      location.href = "print.html";
     }
-    async function loadHistory() {
-      const list = document.getElementById("historyList");
-      const loading = document.getElementById("historyLoading");
-
-      list.innerHTML = "";
-      loading.style.display = "flex";
-
-      try {
-        const r = await fetch(API + "/orders");
-        const data = await r.json();
-
-        data
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-          .forEach((o) => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-          <b>${o.name || "—"}</b>
-          <div class="history-meta">
-            ${o.phone || ""} • 
-            ${new Date(o.createdAt).toLocaleString()}
-          </div>
-          <div class="history-meta">
-            Jami: ${Number(o.total).toLocaleString()} so‘m
-          </div>
-          <div class="history-actions">
-            <button class="open" onclick="openCheck('${o._id}')">Ochish</button>
-            <button class="delete" onclick="deleteCheck('${o._id
-              }')">O‘chirish</button>
-          </div>
-        `;
-            list.appendChild(li);
-          });
-      } catch {
-        list.innerHTML = "<li>Xatolik yuz berdi</li>";
-      } finally {
-        loading.style.display = "none";
-      }
-    }
-
-    function openCheck(id) {
-      // print.html ochiladi (backenddan olib)
-      window.open("print.html?id=" + id, "_blank");
-    }
-
-    async function deleteCheck(id) {
-      if (!confirm("Chek o‘chirilsinmi?")) return;
-      await fetch(API + "/orders/" + id, { method: "DELETE" });
-      loadHistory();
-    }
-
-    /* Sahifa ochilganda */
-    loadHistory();
   </script>
 </body>
 
