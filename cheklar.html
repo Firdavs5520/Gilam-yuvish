@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Cheklar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        body {
+            margin: 0;
+            background: #020617;
+            color: #e5e7eb;
+            font-family: system-ui;
+        }
+
+        .wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top {
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .back {
+            background: #38bdf8;
+            color: #000;
+        }
+
+        .card {
+            background: rgba(2, 6, 23, .85);
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        li {
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-weight: 700;
+        }
+
+        .meta {
+            font-size: 13px;
+            opacity: .7;
+            margin-top: 4px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .open {
+            flex: 1;
+            background: #22c55e;
+            color: #000;
+        }
+
+        .del {
+            flex: 1;
+            background: #ef44441f;
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <div class="top">
+            <button class="back" onclick="goBack()">← Yangi chek yaratish</button>
+        </div>
+
+        <div class="card">
+            <h2 style="text-align:center;margin-top:0">🧾 Cheklar</h2>
+            <ul id="list">Yuklanmoqda...</ul>
+        </div>
+
+    </div>
+
+    <script>
+        const API = "https://gilam-yuvish-backend.onrender.com";
+
+        function goBack() {
+            location.href = "index.html";
+        }
+
+        async function loadChecks() {
+            const ul = document.getElementById("list");
+            ul.innerHTML = "Yuklanmoqda...";
+
+            const res = await fetch(API + "/orders");
+            const data = await res.json();
+
+            ul.innerHTML = "";
+
+            if (!data.length) {
+                ul.innerHTML = "<li>Cheklar yo‘q</li>";
+                return;
+            }
+
+            data.forEach(o => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+          <div class="name">${o.name}</div>
+          <div class="meta">${o.phone || ""}</div>
+          <div class="meta">${new Date(o.createdAt).toLocaleString()}</div>
+          <div class="meta">Jami: ${Number(o.total).toLocaleString()} so‘m</div>
+
+          <div class="actions">
+            <button class="open" onclick="openCheck('${o._id}')">👁 Ochish</button>
+            <button class="del" onclick="deleteCheck('${o._id}')">🗑 O‘chirish</button>
+          </div>
+        `;
+                ul.appendChild(li);
+            });
+        }
+
+        function openCheck(id) {
+            window.open("print.html?id=" + id, "_blank");
+        }
+
+        async function deleteCheck(id) {
+            if (!confirm("Chek o‘chirilsinmi?")) return;
+
+            const res = await fetch(API + "/orders/" + id, {
+                method: "DELETE"
+            });
+
+            if (res.ok) {
+                loadChecks(); // 🔥 UI yangilanadi
+            } else {
+                alert("O‘chirishda xatolik");
+            }
+        }
+
+        loadChecks();
+    </script>
+</body>
+
+</html>

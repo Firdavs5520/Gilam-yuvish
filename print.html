@@ -1,224 +1,166 @@
 <!DOCTYPE html>
 <html lang="uz">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Chek</title>
 
-    <style>
-      @media print {
-        @page {
-          size: 58mm auto;
-          margin: 0;
-        }
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>Чек</title>
 
-      body {
-        font-family: monospace;
-        width: 58mm;
+  <link rel="icon" type="image/png"
+    href="https://peculiar-azure-xpdzzqfo3r.edgeone.app/Skrinshot_2026-01-03_175603-removebg-preview.png" />
+
+  <style>
+    @media print {
+      @page {
+        size: 58mm auto;
         margin: 0;
-        padding: 6px;
-        font-size: 12px;
-        color: #000;
       }
+    }
 
-      .center {
-        text-align: center;
-      }
-      .bold {
-        font-weight: bold;
-      }
-      .right {
-        text-align: right;
-      }
+    body {
+      font-family: monospace;
+      width: 58mm;
+      margin: 0;
+      padding: 6px;
+      font-size: 12px;
+      color: #000;
+    }
 
-      .line {
-        border-top: 1px dashed #000;
-        margin: 6px 0;
-      }
+    .center {
+      text-align: center;
+    }
 
-      .font-line {
-        border-top: 1px solid #000;
-        margin: 6px 0;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12px;
-        table-layout: fixed;
-      }
+    .bold {
+      font-weight: bold;
+    }
 
-      td {
-        padding: 2px 0;
-        white-space: nowrap;
-        overflow: hidden;
-      }
+    .right {
+      text-align: right;
+    }
 
-      .small {
-        font-size: 11px;
-        line-height: 1.3;
-      }
+    .line {
+      border-top: 1px dashed #000;
+      margin: 6px 0;
+    }
 
-      /* USTUN KENGLIKLARI */
-      .col-name {
-        width: 26%;
-      }
-      .col-size {
-        width: 28%;
-        text-align: center;
-      }
-      .col-price {
-        width: 16%;
-        text-align: right;
-      }
-      .col-sum {
-        width: 30%;
-        text-align: right;
-      }
+    .small {
+      font-size: 11px;
+      line-height: 1.3;
+    }
 
-      .client-name {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        text-align: center;
-        font-size: 17px;
-        font-weight: bold;
-        margin: 0;
-        padding: 0;
-        line-height: 1.1;
-      }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
 
-      .client-info {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        font-weight: bold;
-        text-align: center;
-        font-size: 15px;
-        margin: 0;
-        padding: 0;
-        line-height: 1.1;
-      }
+    td {
+      padding: 2px 0;
+    }
+  </style>
+</head>
 
-      .client-number {
-        font-weight: bolder;
-        text-align: center;
-        font-size: 12px;
-        text-transform: uppercase;
-        margin: 0;
-        padding: 0;
-        line-height: 1.1;
-      }
-    </style>
-  </head>
+<body>
+  <div id="out"></div>
 
-  <body>
-    <div id="out"></div>
+  <script>
+    // 🔥 YANGI LOGIKA: faqat localStorage
+    const d = JSON.parse(localStorage.getItem("printOrder"));
 
-    <script>
-      const d = JSON.parse(localStorage.getItem("currentOrder"));
+    if (!d || !Array.isArray(d.items)) {
+      document.getElementById("out").innerHTML =
+        "<div class='center'>Нет данных</div>";
+    } else {
+      const PRICE_PER_M2 = 15000; // 1 m² = 15 000
+      const PRICE_LABEL = 15;     // chekda ko‘rinadi
 
-      function goBack() {
-        localStorage.removeItem("currentOrder");
-        location.replace("index.html");
-      }
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") goBack();
+      const date = new Date(d.createdAt || Date.now()).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
 
-      if (!d || !Array.isArray(d.items)) {
-        document.getElementById("out").innerHTML = "Нет данных";
-        setTimeout(goBack, 1000);
-      } else {
-        const PRICE_PER_M2 = 15000; // 15 000 so‘m
-        const PRICE_LABEL = 15; // chekda ko‘rinadi
+      let rows = "";
+      let total = 0;
 
-        const date = new Date().toLocaleString("ru-RU", {
-          day: "2-digit",
-          month: "long",
-          weekday: "long",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+      d.items.forEach(i => {
+        const l = Number(i.l) || 0;
+        const w = Number(i.w) || 0;
+        const m2 = l * w;
+        const sum = m2 * PRICE_PER_M2;
 
-        let rows = "";
-        let total = 0;
+        total += sum;
 
-        d.items.forEach((i) => {
-          const l = Number(i.l) || 0;
-          const w = Number(i.w) || 0;
-          const m2 = l * w;
-          const sum = m2 * PRICE_PER_M2;
+        rows += `
+          <tr>
+            <td>КОВЕР</td>
+            <td>${l}x${w} м²</td>
+            <td class="right">${PRICE_LABEL}</td>
+            <td class="right">${sum.toLocaleString()}</td>
+          </tr>
+        `;
+      });
 
-          total += sum;
+      document.getElementById("out").innerHTML = `
+        <div class="center">
+          <img src="https://peculiar-azure-xpdzzqfo3r.edgeone.app/Skrinshot_2026-01-03_175603-removebg-preview.png" width="110"><br>
+          <div class="bold">ФАБРИКА ЧИСТКИ КОВРОВ</div>
+          <div class="small">
+            Ул. Буюк Ипак Йули 62А<br>
+            Ташкент<br>
+            Тел: 71 203 82 82
+          </div>
+        </div>
 
-          rows += `
-      <tr>
-        <td class="col-name">КОВЕР</td>
-        <td class="col-size">${l}x${w}m<sup>2</sup></td>
-        <td class="col-price">${PRICE_LABEL}</td>
-        <td class="col-sum">${sum.toLocaleString()}</td>
-      </tr>
-    `;
-        });
+        <div class="line"></div>
 
-        document.getElementById("out").innerHTML = `
-    <div class="center">
-      <img src="https://peculiar-azure-xpdzzqfo3r.edgeone.app/Skrinshot_2026-01-03_175603-removebg-preview.png" width="110"><br>
-      <div class="bold">ФАБРИКА ЧИСТКИ КОВРОВ</div>
-      <div class="small">
-        Ул. Буюк Ипак Йули 62А<br>
-        Ташкент<br>
-        Тел: 71 203 82 82
-      </div>
-    </div>
+        <div class="center bold">${date}</div>
 
-   <div class="line"></div>
+        <div class="line"></div>
 
-    <div class="center bold">${date}</div>
+        <div class="bold">${d.name}</div>
+        <div class="small">${d.address || ""}</div>
+        <div class="small">${d.phone || ""}</div>
 
-    <div class="font-line"></div>
+        <div class="line"></div>
 
-    <div class="client-name">${d.name || "-"}</div>
-    <div class="font-line"></div>
-    <div class="client-info">${d.address || "-"}</div>
-    <div class="font-line"></div>
-    <div class="client-number">${d.phone || "-"}</div>
+        <table>
+          <tr class="bold">
+            <td>Наим.</td>
+            <td>Размер</td>
+            <td class="right">Цена</td>
+            <td class="right">Сумма</td>
+          </tr>
+          ${rows}
+        </table>
 
-    <div class="font-line"></div>
+        <div class="line"></div>
 
-    <table>
-      <tr class="bold">
-        <td class="col-name">Наим.</td>
-        <td class="col-size">Размер</td>
-        <td class="col-price">Цена</td>
-        <td class="col-sum">Сумма</td>
-      </tr>
-      ${rows}
-    </table>
+        <div class="bold">ИТОГО: ${total.toLocaleString()} сум</div>
+        <div>Оплачено: ${(Number(d.paid) || 0).toLocaleString()} сум</div>
+        <div>Тип оплаты: ${d.paymentType || "-"}</div>
 
-    <div class="line"></div>
+        <div class="line"></div>
 
-    <div class="bold">ИТОГО: ${total.toLocaleString()} сум</div>
-    <div>Оплачено: ${(Number(d.paid) || 0).toLocaleString()} сум</div>
+        <div class="small">
+          <b>ВНИМАНИЕ ЗАКАЗЧИКА!</b><br>
+          Химчистка снимает с себя ответственность за скрытые дефекты изделия,
+          сильный износ и отсутствие маркировки.<br>
+          Претензии принимаются только при получении заказа.
+        </div>
 
-    <div class="line"></div>
+        <div class="line"></div>
 
-    <div class="small">
-      <b>ВНИМАНИЕ ЗАКАЗЧИКА!</b><br>
-      Химчистка снимает с себя ответственность за результат оказанных услуг
-      в случае отсутствия маркировки, скрытых дефектов, сильного износа изделия
-      (50–75%), либо длительного хранения.<br><br>
-      Претензии принимаются только при получении заказа.
-      Химчистка не несет ответственности за хранение вещей более 30 дней.
-    </div>
+        <div class="small">
+          Подпись клиента: ______________________
+        </div>
+      `;
 
-    <div class="line"></div>
+      // 🖨 avtomatik chop
+      setTimeout(() => window.print(), 300);
+    }
+  </script>
+</body>
 
-    <div class="small">
-      Подпись клиента: ______________________
-    </div>
-  `;
-
-        setTimeout(() => window.print(), 300);
-        window.onafterprint = goBack;
-      }
-    </script>
-  </body>
 </html>
