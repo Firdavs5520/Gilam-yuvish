@@ -2,267 +2,229 @@
 <html lang="uz">
   <head>
     <meta charset="UTF-8" />
-    <title>📊 Cheklar tarixi</title>
+    <title>📊 Hisobotlar</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
       :root {
         --bg: #020617;
-        --card: rgba(2, 6, 23, 0.75);
+        --card: #020617;
         --text: #e5e7eb;
         --muted: #94a3b8;
         --accent: #38bdf8;
         --border: #1e293b;
-        --danger: #ef4444;
         --success: #22c55e;
       }
-
       * {
         box-sizing: border-box;
       }
-
       body {
         margin: 0;
         background: radial-gradient(circle at top, #020617, #000);
         color: var(--text);
         font-family: system-ui, sans-serif;
       }
-
       .wrap {
-        max-width: 1100px;
+        max-width: 1200px;
         margin: auto;
         padding: 20px;
       }
-
       h1 {
-        margin-top: 0;
         text-align: center;
+        margin-bottom: 20px;
       }
 
-      .controls {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 16px;
-        justify-content: center;
-      }
-
-      input,
-      button {
-        padding: 12px;
-        border-radius: 10px;
-        font-size: 15px;
-        border: 1px solid var(--border);
-        background: transparent;
-        color: var(--text);
-      }
-
-      button {
-        cursor: pointer;
-        border: none;
-        font-weight: 600;
-      }
-
-      .primary {
-        background: linear-gradient(135deg, var(--accent), #0ea5e9);
-        color: #000;
-      }
-
-      .success {
-        background: var(--success);
-        color: #000;
-      }
-
-      .danger {
-        background: var(--danger);
-        color: #000;
-      }
-
-      .grid {
+      /* SUMMARY */
+      .stats {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
       }
-
-      .card {
-        background: var(--card);
+      .stat {
+        background: rgba(2, 6, 23, 0.8);
         border: 1px solid var(--border);
         border-radius: 16px;
         padding: 16px;
-        position: relative;
+        text-align: center;
+      }
+      .stat b {
+        font-size: 22px;
+        display: block;
+        margin-top: 6px;
       }
 
-      .badge {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: var(--success);
+      /* FILTER */
+      .filter {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      button {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        background: var(--accent);
         color: #000;
-        font-size: 12px;
-        padding: 4px 8px;
-        border-radius: 20px;
+        font-weight: 700;
+      }
+      button.secondary {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
       }
 
-      .name {
-        font-size: 17px;
+      /* TABLE */
+      .table-wrap {
+        overflow: auto;
+        background: rgba(2, 6, 23, 0.75);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+      }
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px dashed var(--border);
+        font-size: 14px;
+        text-align: left;
+      }
+      th {
+        color: var(--muted);
+      }
+      .done {
+        color: var(--success);
         font-weight: 700;
       }
 
-      .small {
-        color: var(--muted);
-        font-size: 14px;
-        margin-top: 2px;
-      }
-
-      .items {
-        margin-top: 8px;
-        font-size: 14px;
-      }
-
-      .items div {
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 1px dashed var(--border);
-        padding: 4px 0;
-      }
-
-      .actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 10px;
-      }
-
-      @media (max-width: 700px) {
-        .controls {
-          flex-direction: column;
+      @media (max-width: 768px) {
+        table {
+          min-width: 700px;
         }
-      }
-      .back-btn {
-        margin: 10px auto 20px;
-        display: block;
-        max-width: 260px;
       }
     </style>
   </head>
 
   <body>
-    <button class="primary back-btn" onclick="goBack()">
-      🔁 Yangi buyurtmaga qaytish
-    </button>
-
     <div class="wrap">
-      <h1>📊 Cheklar tarixi</h1>
+      <h1>📊 Hisobotlar</h1>
 
-      <!-- SARALASH -->
-      <div class="controls">
-        <button class="primary" onclick="showAll()">📂 Barcha cheklar</button>
-        <button class="primary" onclick="showToday()">
-          📅 Bugungi cheklar
-        </button>
-        <input id="datePick" type="date" />
-        <button class="primary" onclick="filterByDate()">
-          📆 Tanlangan kun
-        </button>
+      <!-- SUMMARY -->
+      <div class="stats">
+        <div class="stat">👥 Bugungi mijozlar<b id="sClients">0</b></div>
+        <div class="stat">🚚 Yetkazildi<b id="sDelivered">0</b></div>
+        <div class="stat">💰 Bugungi foyda<b id="sProfit">0</b></div>
       </div>
 
-      <!-- LIST -->
-      <div id="grid" class="grid"></div>
+      <!-- FILTER -->
+      <div class="filter">
+        <button onclick="setMode('today')">📅 Bugun</button>
+        <button class="secondary" onclick="setMode('all')">
+          📆 Barcha kunlar
+        </button>
+        <button class="secondary" onclick="goBack()">⬅ Orqaga</button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ism</th>
+              <th>Telefon</th>
+              <th>Sana</th>
+              <th>Jami</th>
+              <th>To‘langan</th>
+              <th>Holat</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
     </div>
 
     <script>
       const API = "https://gilam-yuvish-backend.onrender.com";
       let orders = [];
+      let mode = "today";
+
+      function goBack() {
+        location.href = "index.html";
+      }
+
+      function isToday(dateStr) {
+        const d = new Date(dateStr);
+        const t = new Date();
+        return d.toDateString() === t.toDateString();
+      }
+
+      function setMode(m) {
+        mode = m;
+        render();
+      }
 
       async function load() {
-        const res = await fetch(API + "/orders");
-        orders = await res.json();
-        render(orders);
+        const r = await fetch(API + "/orders");
+        orders = await r.json();
+        render();
       }
 
-      function render(list) {
-        grid.innerHTML = "";
+      function render() {
+        const tbody = document.getElementById("tbody");
+        tbody.innerHTML = "";
 
-        if (!list.length) {
-          grid.innerHTML = "<div class='small'>Cheklar topilmadi</div>";
-          return;
-        }
+        let list =
+          mode === "today" ? orders.filter((o) => isToday(o.date)) : orders;
 
-        list
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
-          .forEach((o) => {
-            const el = document.createElement("div");
-            el.className = "card";
+        let clients = list.length;
+        let delivered = list.filter((o) => o.delivered).length;
+        let profit = list.reduce(
+          (s, o) => s + (Number(o.total) - Number(o.paid || 0)),
+          0
+        );
 
-            el.innerHTML = `
-              ${o.delivered ? `<div class="badge">Yetkazildi</div>` : ""}
-              <div class="name">${o.name || "—"}</div>
-              <div class="small">📞 ${o.phone || "—"}</div>
-              <div class="small">📅 ${o.date || ""}</div>
+        sClients.textContent = clients;
+        sDelivered.textContent = delivered;
+        sProfit.textContent = profit.toLocaleString();
 
-              <div class="items">
-                ${o.items
-                  .map(
-                    (i) =>
-                      `<div><span>${i.l}×${i.w}</span><span>${Number(
-                        i.sum
-                      ).toLocaleString()}</span></div>`
-                  )
-                  .join("")}
-              </div>
+        list.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-              <b>💰 Jami: ${Number(o.total || 0).toLocaleString()} so‘m</b>
-              <div>To‘langan: ${Number(o.paid || 0).toLocaleString()}</div>
-
-              <div class="actions">
-                ${
-                  !o.delivered
-                    ? `<button class="success" onclick="deliver('${
-                        o._id || o.id
-                      }')">🚚 Yetkazildi</button>`
-                    : ""
-                }
-                <button class="danger" onclick="removeOrder('${
-                  o._id || o.id
-                }')">🗑 O‘chirish</button>
-              </div>
-            `;
-            grid.appendChild(el);
-          });
-      }
-
-      function showAll() {
-        render(orders);
-      }
-
-      function showToday() {
-        const today = new Date().toLocaleDateString();
-        render(orders.filter((o) => o.date && o.date.startsWith(today)));
-      }
-
-      function filterByDate() {
-        if (!datePick.value) return;
-        const d = new Date(datePick.value).toLocaleDateString();
-        render(orders.filter((o) => o.date && o.date.startsWith(d)));
+        list.forEach((o) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+        <td>${o.name || "—"}</td>
+        <td>${o.phone || "—"}</td>
+        <td>${o.date || ""}</td>
+        <td>${Number(o.total).toLocaleString()}</td>
+        <td>${Number(o.paid || 0).toLocaleString()}</td>
+        <td class="${o.delivered ? "done" : ""}">
+          ${o.delivered ? "Yetkazildi" : "Kutilmoqda"}
+        </td>
+        <td>
+          ${
+            o.delivered
+              ? ""
+              : `<button onclick="deliver('${o._id || o.id}')">🚚</button>`
+          }
+        </td>
+      `;
+          tbody.appendChild(tr);
+        });
       }
 
       async function deliver(id) {
-        await fetch(API + "/orders/" + id + "/deliver", {
-          method: "PUT",
-        });
-        load();
-      }
-
-      async function removeOrder(id) {
-        if (!confirm("Chek o‘chirilsinmi?")) return;
-        await fetch(API + "/orders/" + id, { method: "DELETE" });
+        await fetch(API + "/orders/" + id + "/deliver", { method: "PUT" });
         load();
       }
 
       load();
-
-      function goBack() {
-        window.location.href = "index.html";
-      }
     </script>
   </body>
 </html>
