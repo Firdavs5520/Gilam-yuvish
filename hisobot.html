@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="uz">
   <head>
+    <meta charset="UTF-8" />
+    <title>📊 Hisobotlar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- favicon -->
     <link
       rel="icon"
       type="image/png"
       href="https://peculiar-azure-xpdzzqfo3r.edgeone.app/Skrinshot_2026-01-03_175603-removebg-preview.png"
     />
-
-    <meta charset="UTF-8" />
-    <title>Brand</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
       :root {
@@ -20,53 +21,39 @@
         --accent: #38bdf8;
         --border: #1e293b;
         --success: #22c55e;
+        --danger: #ef4444;
       }
+
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         background: radial-gradient(circle at top, #020617, #000);
         color: var(--text);
         font-family: system-ui, sans-serif;
       }
+
       .wrap {
         max-width: 1200px;
         margin: auto;
-        padding: 20px;
+        padding: 16px;
       }
+
       h1 {
         text-align: center;
-        margin-bottom: 20px;
+        margin: 12px 0 16px;
       }
 
-      /* SUMMARY */
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
-      }
-      .stat {
-        background: rgba(2, 6, 23, 0.8);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 16px;
-        text-align: center;
-      }
-      .stat b {
-        font-size: 22px;
-        display: block;
-        margin-top: 6px;
-      }
-
-      /* FILTER */
-      .filter {
+      /* TOP BAR */
+      .topbar {
         display: flex;
         gap: 10px;
-        margin-bottom: 14px;
         flex-wrap: wrap;
+        margin-bottom: 14px;
       }
+
       button {
         padding: 10px 14px;
         border-radius: 12px;
@@ -76,42 +63,113 @@
         color: #000;
         font-weight: 700;
       }
+
       button.secondary {
         background: transparent;
         color: var(--text);
         border: 1px solid var(--border);
       }
 
+      button.active {
+        background: #0ea5e9;
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.35);
+      }
+
+      input[type="date"] {
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #020617;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      /* STATS */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .stat {
+        background: rgba(2, 6, 23, 0.8);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 14px;
+        text-align: center;
+      }
+
+      .stat b {
+        display: block;
+        font-size: 22px;
+        margin-top: 6px;
+      }
+
+      /* LOADING */
+      .loading {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: var(--muted);
+        margin: 20px 0;
+      }
+
+      .spinner {
+        width: 22px;
+        height: 22px;
+        border: 3px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
       /* TABLE */
       .table-wrap {
-        overflow: auto;
+        overflow-x: auto;
         background: rgba(2, 6, 23, 0.75);
         border: 1px solid var(--border);
         border-radius: 16px;
       }
+
       table {
         width: 100%;
         border-collapse: collapse;
         min-width: 900px;
       }
+
       th,
       td {
         padding: 12px;
         border-bottom: 1px dashed var(--border);
         font-size: 14px;
         text-align: left;
+        white-space: nowrap;
       }
+
       th {
         color: var(--muted);
       }
+
       .done {
         color: var(--success);
         font-weight: 700;
       }
 
+      .btn-deliver {
+        background: var(--success);
+        color: #000;
+      }
+
       @media (max-width: 768px) {
         table {
-          min-width: 700px;
+          min-width: 760px;
         }
       }
     </style>
@@ -119,26 +177,32 @@
 
   <body>
     <div class="wrap">
-      <h1>📊 Hisobotlar</h1>
-
-      <!-- SUMMARY -->
-      <div class="stats">
-        <div class="stat">👥 Bugungi mijozlar<b id="sClients">0</b></div>
-        <div class="stat">🚚 Yetkazildi<b id="sDelivered">0</b></div>
-        <div class="stat">💰 Bugungi foyda<b id="sProfit">0</b></div>
+      <div class="topbar">
+        <button onclick="goIndex()">⬅ Yangi buyurtma</button>
+        <button id="btnToday" onclick="setMode('today')">📅 Bugun</button>
+        <button id="btnAll" class="secondary" onclick="setMode('all')">
+          📆 Barcha
+        </button>
+        <input type="date" id="datePick" onchange="pickDate()" />
       </div>
 
-      <!-- FILTER -->
-      <div class="filter">
-        <button onclick="setMode('today')">📅 Bugun</button>
-        <button class="secondary" onclick="setMode('all')">
-          📆 Barcha kunlar
-        </button>
-        <button class="secondary" onclick="goBack()">⬅ Orqaga</button>
+      <h1>📊 Hisobotlar</h1>
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat">👥 Mijozlar<b id="sClients">0</b></div>
+        <div class="stat">🚚 Yetkazildi<b id="sDelivered">0</b></div>
+        <div class="stat">💰 Foyda<b id="sProfit">0</b></div>
+      </div>
+
+      <!-- LOADING -->
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <span>Yuklanmoqda...</span>
       </div>
 
       <!-- TABLE -->
-      <div class="table-wrap">
+      <div class="table-wrap" id="tableWrap" style="display: none">
         <table>
           <thead>
             <tr>
@@ -147,6 +211,7 @@
               <th>Sana</th>
               <th>Jami</th>
               <th>To‘langan</th>
+              <th>To‘lov</th>
               <th>Holat</th>
               <th></th>
             </tr>
@@ -160,73 +225,110 @@
       const API = "https://gilam-yuvish-backend.onrender.com";
       let orders = [];
       let mode = "today";
+      let selectedDate = "";
 
-      function goBack() {
+      function goIndex() {
         location.href = "index.html";
+      }
+
+      function formatDate(d) {
+        return d ? new Date(d).toLocaleString("uz-UZ") : "";
       }
 
       function isToday(dateStr) {
         const d = new Date(dateStr);
-        const t = new Date();
-        return d.toDateString() === t.toDateString();
+        const now = new Date();
+        return (
+          d.getFullYear() === now.getFullYear() &&
+          d.getMonth() === now.getMonth() &&
+          d.getDate() === now.getDate()
+        );
+      }
+
+      function isSameDate(dateStr, ymd) {
+        return new Date(dateStr).toISOString().slice(0, 10) === ymd;
       }
 
       function setMode(m) {
         mode = m;
+        selectedDate = "";
+        datePick.value = "";
+        btnToday.classList.toggle("active", m === "today");
+        btnAll.classList.toggle("active", m === "all");
+        render();
+      }
+
+      function pickDate() {
+        selectedDate = datePick.value;
+        mode = "";
+        btnToday.classList.remove("active");
+        btnAll.classList.remove("active");
         render();
       }
 
       async function load() {
+        loading.style.display = "flex";
+        tableWrap.style.display = "none";
+
         const r = await fetch(API + "/orders");
         orders = await r.json();
-        render();
+
+        setTimeout(() => {
+          loading.style.display = "none";
+          tableWrap.style.display = "block";
+          render();
+        }, 300);
       }
 
       function render() {
-        const tbody = document.getElementById("tbody");
         tbody.innerHTML = "";
 
-        let list =
-          mode === "today" ? orders.filter((o) => isToday(o.date)) : orders;
+        let list = orders;
 
-        let clients = list.length;
-        let delivered = list.filter((o) => o.delivered).length;
-        let profit = list.reduce(
-          (s, o) => s + (Number(o.total) - Number(o.paid || 0)),
-          0
-        );
+        if (selectedDate) {
+          list = orders.filter((o) => isSameDate(o.createdAt, selectedDate));
+        } else if (mode === "today") {
+          list = orders.filter((o) => isToday(o.createdAt));
+        }
 
-        sClients.textContent = clients;
-        sDelivered.textContent = delivered;
-        sProfit.textContent = profit.toLocaleString();
+        list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        list.sort((a, b) => new Date(b.date) - new Date(a.date));
+        sClients.textContent = list.length;
+        sDelivered.textContent = list.filter((o) => o.delivered).length;
+        sProfit.textContent = list
+          .reduce((s, o) => s + (Number(o.total) - Number(o.paid || 0)), 0)
+          .toLocaleString();
 
         list.forEach((o) => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-        <td>${o.name || "—"}</td>
-        <td>${o.phone || "—"}</td>
-        <td>${o.date || ""}</td>
-        <td>${Number(o.total).toLocaleString()}</td>
-        <td>${Number(o.paid || 0).toLocaleString()}</td>
-        <td class="${o.delivered ? "done" : ""}">
-          ${o.delivered ? "Yetkazildi" : "Kutilmoqda"}
-        </td>
-        <td>
-          ${
-            o.delivered
-              ? ""
-              : `<button onclick="deliver('${o._id || o.id}')">🚚</button>`
-          }
-        </td>
-      `;
+            <td>${o.name || "—"}</td>
+            <td>${o.phone || "—"}</td>
+            <td>${formatDate(o.createdAt)}</td>
+            <td>${Number(o.total).toLocaleString()}</td>
+            <td>${Number(o.paid || 0).toLocaleString()}</td>
+            <td>${o.paymentType || "—"}</td>
+            <td class="${o.delivered ? "done" : ""}">
+              ${o.delivered ? "Yetkazildi" : "Kutilmoqda"}
+            </td>
+            <td>
+              ${
+                o.delivered
+                  ? ""
+                  : `<button class="btn-deliver" onclick="deliver('${o._id}')">
+                       🚚 Yetkazildi
+                     </button>`
+              }
+            </td>
+          `;
           tbody.appendChild(tr);
         });
       }
 
       async function deliver(id) {
-        await fetch(API + "/orders/" + id + "/deliver", { method: "PUT" });
+        await fetch(API + "/orders/" + id + "/deliver", {
+          method: "PUT",
+        });
         load();
       }
 

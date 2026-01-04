@@ -146,12 +146,9 @@
   </head>
 
   <body>
+    <button onclick="goReport()">📊 Hisobotlar</button>
     <div class="app">
       <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <button onclick="location.reload()">➕ Yangi buyurtma</button>
-        <button onclick="openReport()">📊 Hisobotlar</button>
-      </aside>
 
       <!-- MAIN -->
       <main class="main">
@@ -294,6 +291,9 @@
         setPay("Naqd");
 
         window.open("print.html", "_blank");
+      }
+      function goReport() {
+        location.href = "hisobot.html";
       }
     </script>
   </body>
